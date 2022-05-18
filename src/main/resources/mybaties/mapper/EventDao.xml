@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.opinion.viopinion.dao.EventDao">
+
+    <resultMap type="com.opinion.viopinion.entity.Event" id="EventMap">
+
+        <result property="event_id" column="event_id" jdbcType="INTEGER"/>
+
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+
+        <result property="abstract2" column="abstract" jdbcType="VARCHAR"/>
+
+        <result property="keyword" column="keyword" jdbcType="VARCHAR"/>
+
+        <result property="sentiment_pos" column="sentiment_pos" jdbcType="INTEGER"/>
+
+        <result property="sentiment_neg" column="sentiment_neg" jdbcType="INTEGER"/>
+
+        <result property="sentiment_middle" column="sentiment_middle" jdbcType="INTEGER"/>
+
+        <result property="count_event" column="count_event" jdbcType="INTEGER"/>
+
+        <result property="news_cycle" column="news_cycle" jdbcType="INTEGER"/>
+
+    </resultMap>
+
+    <!--查询event表部分-->
+    <select id="queryEvent" resultMap="EventMap">
+        select
+            event_id, title, keyword, abstract
+        from event
+    </select>
+
+    <!--根据周期返回热点事件(本周本月本季)-->
+    <select id="queryCycleEvent" resultMap="EventMap">
+        select
+            event_id, title, keyword, abstract, sentiment_pos, sentiment_neg, sentiment_middle, count_event, news_cycle
+        from event where news_cycle = #{news_cycle}
+    </select>
+
+</mapper>
+
