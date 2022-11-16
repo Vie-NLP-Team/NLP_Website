@@ -1,7 +1,6 @@
 package com.opinion.viopinion.controller;
 
 import com.opinion.viopinion.entity.Article;
-import com.opinion.viopinion.entity.Month;
 import com.opinion.viopinion.entity.Web;
 import com.opinion.viopinion.service.ArticleService;
 import org.springframework.data.domain.Page;

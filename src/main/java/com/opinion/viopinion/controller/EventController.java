@@ -26,11 +26,11 @@ public class EventController {
 
     /**
      * 返回全部事件内容
-     * @param event_id
-     * @param title
-     * @param keyword
-     * @param abstract2
-     * @return
+     * @param event_id event_id
+     * @param title title
+     * @param keyword keyword
+     * @param abstract2 abstract2
+     * @return Event
      */
 
     @GetMapping("/queryEvent")
