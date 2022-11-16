@@ -1,7 +1,6 @@
 package com.opinion.viopinion.service.impl;
 
 import com.opinion.viopinion.entity.Article;
-import com.opinion.viopinion.entity.Month;
 import com.opinion.viopinion.entity.Web;
 import com.opinion.viopinion.dao.ArticleDao;
 import com.opinion.viopinion.service.ArticleService;
@@ -76,9 +75,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     /**
      * 通过主键删除数据
-     *
      * @param id 主键
-     * @return 是否成功
+     * @return boolean
      */
     @Override
     public boolean deleteById(Integer id) {
@@ -88,8 +86,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     /**
      * 返回新闻社分别统计的文章的总数
-     * @param
-     * @return
+     * @return Web
      */
     @Override
     public List<Web> queryWebArticleSum() {

@@ -1,7 +1,6 @@
 package com.opinion.viopinion.service;
 
 import com.opinion.viopinion.entity.Article;
-import com.opinion.viopinion.entity.Month;
 import com.opinion.viopinion.entity.Web;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -60,8 +59,7 @@ public interface ArticleService {
 
     /**
      * 返回新闻社分别统计的文章的总数
-     * @param
-     * @return
+     * @return Web
      */
     List<Web> queryWebArticleSum();
 

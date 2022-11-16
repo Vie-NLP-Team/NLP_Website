@@ -9,8 +9,8 @@ public interface MonthDao {
 
     /**
      * 通过热点事件id返回新闻列表
-     * @param month_event
-     * @return
+     * @param month_event month_event
+     * @return Month
      */
     List<Month> queryHotPointArticle(Integer month_event);
 }
