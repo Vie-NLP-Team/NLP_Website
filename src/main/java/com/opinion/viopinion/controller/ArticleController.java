@@ -7,8 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -20,11 +18,14 @@ import java.util.List;
 @RestController
 @RequestMapping("article")
 public class ArticleController {
+
     /**
      * 服务对象
      */
-    @Resource
-    private ArticleService articleService;
+    private final ArticleService articleService;
+    public ArticleController(ArticleService articleService) {
+        this.articleService = articleService;
+    }
 
     /**
      * 分页查询
@@ -40,7 +41,6 @@ public class ArticleController {
 
     /**
      * 通过主键查询单条数据
-     *
      * @param id 主键
      * @return 单条数据
      */

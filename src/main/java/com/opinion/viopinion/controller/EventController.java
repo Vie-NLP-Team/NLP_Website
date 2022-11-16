@@ -1,20 +1,19 @@
 package com.opinion.viopinion.controller;
 
-
 import com.opinion.viopinion.entity.Event;
 import com.opinion.viopinion.service.EventService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
 @RequestMapping("event")
 public class EventController {
 
-    @Resource
-    private EventService eventService;
+    private final EventService eventService;
+    public EventController(EventService eventService) {
+        this.eventService = eventService;
+    }
 
     /**
      * 通过热点事件周期返回事件列表
