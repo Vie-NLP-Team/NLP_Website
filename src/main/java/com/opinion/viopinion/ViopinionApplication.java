@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@EnableJdbcRepositories("com.opinion.viopinion")
-@EnableJpaRepositories("com.opinion.viopinion")
-@EntityScan("com.opinion.viopinion")
+@EnableJdbcRepositories("com.opinion.viopinion.repository")
+@EnableJpaRepositories("com.opinion.viopinion.repository")
+@EntityScan("com.opinion.viopinion.entity")
 @SpringBootApplication
 public class ViopinionApplication {
 

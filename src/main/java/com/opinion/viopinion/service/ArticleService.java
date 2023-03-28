@@ -57,7 +57,7 @@ public interface ArticleService {
     /**
      * 返回新闻社分别统计的文章的总数
      *
-     * @return Web
+     * @return WebArticleCountVo
      */
     List<WebArticleCountVo> queryWebArticleSum();
 }

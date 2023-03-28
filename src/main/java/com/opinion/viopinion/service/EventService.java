@@ -7,5 +7,5 @@ public interface EventService {
 
     List<EventDto> queryAllEvent();
 
-    List<EventDto> queryEventByCycle(Integer newscycle);
+    List<EventDto> queryEventByCycle(Integer newsCycle);
 }
