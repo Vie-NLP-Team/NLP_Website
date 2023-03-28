@@ -1,42 +1,35 @@
 package com.opinion.viopinion.controller;
 
-import com.opinion.viopinion.entity.Event;
-import com.opinion.viopinion.service.EventService;
-import org.springframework.http.ResponseEntity;
+import com.opinion.viopinion.entity.dto.EventDto;
+import com.opinion.viopinion.service.impl.EventServiceImpl;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("event")
 public class EventController {
-
-    private final EventService eventService;
-    public EventController(EventService eventService) {
-        this.eventService = eventService;
-    }
-
-    /**
-     * 通过热点事件周期返回事件列表
-     */
-    @GetMapping("{news_cycle}")
-    public ResponseEntity<List<Event>> queryCycleEvent(@PathVariable("news_cycle") Integer news_cycle) {
-        return ResponseEntity.ok(this.eventService.queryCycleEvent(news_cycle));
+    private final EventServiceImpl eventServiceImpl;
+    public EventController(EventServiceImpl eventServiceImpl) {
+        this.eventServiceImpl = eventServiceImpl;
     }
 
     /**
      * 返回全部事件内容
-     * @param event_id event_id
-     * @param title title
-     * @param keyword keyword
-     * @param abstract2 abstract2
+     *
      * @return Event
      */
-
-    @GetMapping("/queryEvent")
-    public ResponseEntity<List<Event>> queryEvent(Integer event_id, String title, String keyword, String abstract2){
-        return ResponseEntity.ok(this.eventService.queryEvent(event_id,title,keyword,abstract2));
+    @GetMapping
+    public List<EventDto> queryEvent() {
+        return eventServiceImpl.queryAllEvent();
     }
 
-
-
+    /**
+     * 通过热点事件周期返回事件列表
+     * @param newsCycle news_cycle
+     * @return Event
+     */
+    @GetMapping("{newscycle}")
+    public List<EventDto> queryCycleEvent(@PathVariable("newscycle") Integer newsCycle) {
+        return eventServiceImpl.queryEventByCycle(newsCycle);
+    }
 }

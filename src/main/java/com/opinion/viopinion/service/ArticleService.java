@@ -1,10 +1,9 @@
 package com.opinion.viopinion.service;
 
-import com.opinion.viopinion.entity.Article;
-import com.opinion.viopinion.entity.Web;
+import com.opinion.viopinion.entity.dto.ArticleDto;
+import com.opinion.viopinion.entity.vo.WebArticleCountVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-
 import java.util.List;
 
 /**
@@ -14,62 +13,51 @@ import java.util.List;
  * @since 2022-03-06 11:52:31
  */
 public interface ArticleService {
-
     /**
      * 通过ID查询单条数据
      *
      * @param id 主键
      * @return 实例对象
      */
-    Article queryById(Integer id);
-    List<Article> queryByBody(String body);
-
+    ArticleDto queryById(Integer id);
+    /**
+     * 通过Body查询单条数据
+     *
+     * @param body 输入
+     * @return Article
+     */
+    List<ArticleDto> queryByBody(String body);
     /**
      * 分页查询
      *
-     * @param article 筛选条件
      * @param pageRequest      分页对象
      * @return 查询结果
      */
-    Page<Article> queryByPage(Article article, PageRequest pageRequest);
-
+    Page<ArticleDto> queryByPage(PageRequest pageRequest);
     /**
      * 新增数据
      *
-     * @param article 实例对象
-     * @return 实例对象
+     * @param articleDto 实例对象
      */
-    Article insert(Article article);
+    void insert(ArticleDto articleDto);
 
     /**
      * 修改数据
      *
-     * @param article 实例对象
-     * @return 实例对象
+     * @param articleDto 实例对象
      */
-    Article update(Article article);
-
+    void update(ArticleDto articleDto);
     /**
      * 通过主键删除数据
      *
      * @param id 主键
-     * @return 是否成功
      */
-    boolean deleteById(Integer id);
+    void deleteById(Integer id);
 
     /**
      * 返回新闻社分别统计的文章的总数
+     *
      * @return Web
      */
-    List<Web> queryWebArticleSum();
-
-    /**
-     * 返回根据新闻社类别统计的文章的正面或负面总数
-     */
-    List<Web> queryWebSenSum(Integer sentiment);
-
-    /**
-     * 统计每个事件的各个新闻社的新闻数量
-     */
-    List<Web> queryWebSenEventSum(Integer monthevent, Integer sentiment);
+    List<WebArticleCountVo> queryWebArticleSum();
 }

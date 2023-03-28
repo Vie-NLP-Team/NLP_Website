@@ -7,8 +7,3 @@ spring:
     #    password: 525300
     #    password: g111519946
     password: abc13798111003
-mybatis:
-  mapper-locations: classpath:mybaties/mapper/*.xml
-server:
-  servlet:
-    context-path: /

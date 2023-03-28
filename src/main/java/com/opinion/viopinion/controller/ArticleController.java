@@ -1,8 +1,8 @@
 package com.opinion.viopinion.controller;
 
-import com.opinion.viopinion.entity.Article;
-import com.opinion.viopinion.entity.Web;
-import com.opinion.viopinion.service.ArticleService;
+import com.opinion.viopinion.entity.dto.ArticleDto;
+import com.opinion.viopinion.entity.vo.WebArticleCountVo;
+import com.opinion.viopinion.service.impl.ArticleServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -11,102 +11,74 @@ import java.util.List;
 
 /**
  * (Article)表控制层
- *
  * @author makejava
  * @since 2022-03-06 11:52:25
  */
 @RestController
 @RequestMapping("article")
 public class ArticleController {
-
-    /**
-     * 服务对象
-     */
-    private final ArticleService articleService;
-    public ArticleController(ArticleService articleService) {
-        this.articleService = articleService;
+    private final ArticleServiceImpl articleServiceImpl;
+    public ArticleController(ArticleServiceImpl articleServiceImpl) {
+        this.articleServiceImpl = articleServiceImpl;
     }
-
-    /**
-     * 分页查询
-     *
-     * @param article 筛选条件
-     * @param pageRequest      分页对象
-     * @return 查询结果
-     */
-    @GetMapping
-    public ResponseEntity<Page<Article>> queryByPage(Article article, PageRequest pageRequest) {
-        return ResponseEntity.ok(this.articleService.queryByPage(article, pageRequest));
-    }
-
     /**
      * 通过主键查询单条数据
      * @param id 主键
      * @return 单条数据
      */
     @GetMapping("{id}")
-    public ResponseEntity<Article> queryById(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(this.articleService.queryById(id));
+    public ResponseEntity<ArticleDto> queryById(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(this.articleServiceImpl.queryById(id));
     }
-    @GetMapping("/querybybody/{body}")
-    public ResponseEntity<List<Article>> queryByBody(@PathVariable("body") String body){
-        return ResponseEntity.ok(articleService.queryByBody(body));
+    @GetMapping("/body/{body}")
+    public ResponseEntity<List<ArticleDto>> queryByBody(@PathVariable("body") String body){
+        return ResponseEntity.ok(articleServiceImpl.queryByBody(body));
+    }
+    /**
+     * 分页查询
+     * @param pageRequest 分页对象
+     * @return 查询结果
+     */
+    @GetMapping
+    public ResponseEntity<Page<ArticleDto>> queryByPage(PageRequest pageRequest) {
+        return ResponseEntity.ok(articleServiceImpl.queryByPage(pageRequest));
     }
     /**
      * 新增数据
      *
-     * @param article 实体
-     * @return 新增结果
+     * @param articleDto 实体
      */
     @PostMapping
-    public ResponseEntity<Article> add(Article article) {
-        return ResponseEntity.ok(this.articleService.insert(article));
+    public void add(ArticleDto articleDto) {
+        this.articleServiceImpl.insert(articleDto);
     }
 
     /**
      * 编辑数据
      *
-     * @param article 实体
-     * @return 编辑结果
+     * @param articleDto 实体
      */
     @PutMapping
-    public ResponseEntity<Article> edit(Article article) {
-        return ResponseEntity.ok(this.articleService.update(article));
+    public void edit(ArticleDto articleDto) {
+        this.articleServiceImpl.update(articleDto);
     }
 
     /**
      * 删除数据
      *
      * @param id 主键
-     * @return 删除是否成功
      */
     @DeleteMapping
-    public ResponseEntity<Boolean> deleteById(Integer id) {
-        return ResponseEntity.ok(this.articleService.deleteById(id));
+    public void deleteById(Integer id) {
+        articleServiceImpl.deleteById(id);
     }
 
     /**
      * 返回新闻社分别统计的文章的总数
      */
-    @GetMapping("/queryWebArticleSum")
-    public ResponseEntity<List<Web>> queryWebArticleSum(){
-        return ResponseEntity.ok(this.articleService.queryWebArticleSum());
-    }
-
-    /**
-     * 返回根据新闻社类别统计的文章的正面或负面总数
-     */
-    @GetMapping("/queryWebSenSum/{sentiment}")
-    public ResponseEntity<List<Web>> queryWebSenSum(@PathVariable("sentiment") Integer sentiment) {
-        return ResponseEntity.ok(this.articleService.queryWebSenSum(sentiment));
-    }
-
-    /**
-     * 统计每个事件的各个新闻社的新闻数量(分正面和负面)
-     */
-    @GetMapping("/queryWebSenEventSum/{sentiment}/{monthevent}")
-    public ResponseEntity<List<Web>> queryWebSenEventSum(@PathVariable("sentiment") Integer sentiment, @PathVariable("monthevent") Integer monthevent) {
-        return ResponseEntity.ok(this.articleService.queryWebSenEventSum(sentiment, monthevent));
+    @GetMapping("/webSum")
+    public ResponseEntity<List<WebArticleCountVo>> queryWebArticleSum(){
+        return ResponseEntity.ok(this.articleServiceImpl.queryWebArticleSum());
     }
 }
 

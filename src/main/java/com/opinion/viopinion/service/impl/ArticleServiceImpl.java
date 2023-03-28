@@ -1,111 +1,101 @@
 package com.opinion.viopinion.service.impl;
 
-import com.opinion.viopinion.entity.Article;
-import com.opinion.viopinion.entity.Web;
-import com.opinion.viopinion.dao.ArticleDao;
+import com.opinion.viopinion.entity.dto.ArticleDto;
+import com.opinion.viopinion.entity.vo.WebArticleCountVo;
+import com.opinion.viopinion.repository.ArticleRepository;
+import com.opinion.viopinion.repository.WebRepository;
 import com.opinion.viopinion.service.ArticleService;
+import lombok.var;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-
-import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * (Article)表服务实现类
- *
  * @author makejava
  * @since 2022-03-06 11:52:32
  */
-@Service("articleService")
+@Service
 public class ArticleServiceImpl implements ArticleService {
-    @Resource
-    private ArticleDao articleDao;
+    private final ArticleRepository articleRepository;
+    private final WebRepository webRepository;
+
+    public ArticleServiceImpl(ArticleRepository articleRepository, WebRepository webRepository) {
+        this.articleRepository = articleRepository;
+        this.webRepository = webRepository;
+    }
 
     /**
      * 通过ID查询单条数据
-     *
      * @param id 主键
      * @return 实例对象
      */
     @Override
-    public Article queryById(Integer id) {
-        return this.articleDao.queryById(id);
+    public ArticleDto queryById(Integer id) {
+        return articleRepository.findArticleById(id);
     }
     @Override
-    public List<Article> queryByBody(String body){return articleDao.queryByBody(body);}
-
+    public List<ArticleDto> queryByBody(String body){
+        return articleRepository.findArticlesByBody(body);
+    }
     /**
      * 分页查询
-     *
-     * @param article 筛选条件
      * @param pageRequest      分页对象
      * @return 查询结果
      */
     @Override
-    public Page<Article> queryByPage(Article article, PageRequest pageRequest) {
-        long total = this.articleDao.count(article);
-        return new PageImpl<>(this.articleDao.queryAllByLimit(article, pageRequest), pageRequest, total);
+    public Page<ArticleDto> queryByPage(PageRequest pageRequest) {
+        Sort.Order order = new Sort.Order(Sort.Direction.DESC, "id");
+        Sort sort = Sort.by(order);
+        Pageable pageable = PageRequest.of(1,2,sort);
+        return articleRepository.findAll(pageable);
     }
-
     /**
      * 新增数据
      *
-     * @param article 实例对象
-     * @return 实例对象
+     * @param articleDto 实例对象
      */
     @Override
-    public Article insert(Article article) {
-        this.articleDao.insert(article);
-        return article;
+    public void insert(ArticleDto articleDto) {
+        articleRepository.save(articleDto);
     }
-
     /**
      * 修改数据
      *
-     * @param article 实例对象
-     * @return 实例对象
+     * @param articleDto 实例对象
      */
     @Override
-    public Article update(Article article) {
-        this.articleDao.update(article);
-        return this.queryById(article.getId());
+    public void update(ArticleDto articleDto) {
+        var reArticle = articleRepository.findArticleById(articleDto.getId());
+        BeanUtils.copyProperties(articleDto, reArticle);
+        articleRepository.save(reArticle);
     }
 
     /**
      * 通过主键删除数据
+     *
      * @param id 主键
-     * @return boolean
      */
     @Override
-    public boolean deleteById(Integer id) {
-        return this.articleDao.deleteById(id) > 0;
+    public void deleteById(Integer id) {
+        articleRepository.deleteById(id);
     }
-
-
     /**
      * 返回新闻社分别统计的文章的总数
+     *
      * @return Web
      */
     @Override
-    public List<Web> queryWebArticleSum() {
-        return this.articleDao.queryWebArticleSum();
-    }
-
-    /**
-     * 返回根据新闻社类别统计的文章的正面或负面总数
-     */
-    @Override
-    public List<Web> queryWebSenSum(Integer sentiment) {
-        return this.articleDao.queryWebSenSum(sentiment);
-    }
-
-    /**
-     * 统计每个事件的各个新闻社的新闻数量
-     */
-    @Override
-    public List<Web> queryWebSenEventSum(Integer monthevent, Integer sentiment) {
-        return this.articleDao.queryWebSenEventSum(monthevent, sentiment);
+    public List<WebArticleCountVo> queryWebArticleSum() {
+        List<WebArticleCountVo> webCount = new ArrayList<>();
+        webRepository.findAll().forEach(w -> {
+            var web = new WebArticleCountVo();
+            web.setWebName(w.getWebName());
+            web.setArticleCount(articleRepository.findArticleByWebsiteId(w.getWebsiteId()).size());
+            webCount.add(web);
+        });
+        return webCount;
     }
 }

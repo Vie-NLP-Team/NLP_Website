@@ -1,8 +1,7 @@
 package com.opinion.viopinion.controller;
 
-import com.opinion.viopinion.entity.Month;
-import com.opinion.viopinion.service.MonthService;
-import org.springframework.http.ResponseEntity;
+import com.opinion.viopinion.entity.vo.MonthVo;
+import com.opinion.viopinion.service.impl.MonthServiceImpl;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -10,16 +9,16 @@ import java.util.List;
 @RequestMapping("montharticle")
 public class MonthController {
 
-    private final MonthService monthService;
-    public MonthController(MonthService monthService) {
-        this.monthService = monthService;
+    private final MonthServiceImpl monthServiceImpl;
+    public MonthController(MonthServiceImpl monthServiceImpl) {
+        this.monthServiceImpl = monthServiceImpl;
     }
 
     /**
      * 通过热点事件id返回新闻列表
      */
-    @GetMapping("{month_event}")
-    public ResponseEntity<List<Month>> queryHotPointArticle(@PathVariable("month_event") Integer month_event) {
-        return ResponseEntity.ok(this.monthService.queryHotPointArticle(month_event));
+    @GetMapping("{monthevent}")
+    public List<MonthVo> queryHotPointArticle(@PathVariable("monthevent") Integer monthevent) {
+        return this.monthServiceImpl.queryMonthOfArticle(monthevent);
     }
 }

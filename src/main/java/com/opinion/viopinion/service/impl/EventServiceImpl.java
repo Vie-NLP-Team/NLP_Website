@@ -1,30 +1,31 @@
 package com.opinion.viopinion.service.impl;
 
-import com.opinion.viopinion.dao.EventDao;
-import com.opinion.viopinion.entity.Event;
+import com.opinion.viopinion.entity.dto.EventDto;
+import com.opinion.viopinion.repository.EventRepository;
 import com.opinion.viopinion.service.EventService;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
-@Service("eventService")
+@Service
 public class EventServiceImpl implements EventService {
-    @Resource
-    private EventDao eventDao;
+
+    private final EventRepository eventRepository;
+    public EventServiceImpl(EventRepository eventRepository) {
+        this.eventRepository = eventRepository;
+    }
 
     @Override
-    public List<Event> queryEvent(Integer event_id, String title, String keyword, String abstract2){return eventDao.queryEvent(event_id,title,keyword,abstract2);}
-
+    public List<EventDto> queryAllEvent() {
+        return eventRepository.findAll();
+    }
 
     /**
      * 通过热点事件周期返回事件列表
-     * @param news_cycle news_cycle
      * @return Event
      */
-
     @Override
-    public List<Event> queryCycleEvent(Integer news_cycle) {
-        return this.eventDao.queryCycleEvent(news_cycle);
+    public List<EventDto> queryEventByCycle(Integer newsCycle) {
+        return eventRepository.findEventByNewsCycle(newsCycle);
     }
 }

@@ -1,10 +1,14 @@
 package com.opinion.viopinion;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@MapperScan("com.opinion.viopinion.dao")
+@EnableJdbcRepositories("com.opinion.viopinion")
+@EnableJpaRepositories("com.opinion.viopinion")
+@EntityScan("com.opinion.viopinion")
 @SpringBootApplication
 public class ViopinionApplication {
 
