@@ -21,6 +21,7 @@ public class ArticleController {
     public ArticleController(ArticleServiceImpl articleServiceImpl) {
         this.articleServiceImpl = articleServiceImpl;
     }
+
     /**
      * 通过主键查询单条数据
      * @param id 主键
@@ -28,12 +29,14 @@ public class ArticleController {
      */
     @GetMapping("{id}")
     public ResponseEntity<ArticleDto> queryById(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(this.articleServiceImpl.queryById(id));
+        return ResponseEntity.ok(articleServiceImpl.queryById(id));
     }
+
     @GetMapping("/body/{body}")
     public ResponseEntity<List<ArticleDto>> queryByBody(@PathVariable("body") String body){
         return ResponseEntity.ok(articleServiceImpl.queryByBody(body));
     }
+
     /**
      * 分页查询
      * @param pageRequest 分页对象
@@ -43,6 +46,7 @@ public class ArticleController {
     public ResponseEntity<Page<ArticleDto>> queryByPage(PageRequest pageRequest) {
         return ResponseEntity.ok(articleServiceImpl.queryByPage(pageRequest));
     }
+
     /**
      * 新增数据
      *
@@ -50,7 +54,7 @@ public class ArticleController {
      */
     @PostMapping
     public void add(ArticleDto articleDto) {
-        this.articleServiceImpl.insert(articleDto);
+        articleServiceImpl.insert(articleDto);
     }
 
     /**
@@ -60,7 +64,7 @@ public class ArticleController {
      */
     @PutMapping
     public void edit(ArticleDto articleDto) {
-        this.articleServiceImpl.update(articleDto);
+        articleServiceImpl.update(articleDto);
     }
 
     /**
@@ -78,7 +82,7 @@ public class ArticleController {
      */
     @GetMapping("/webSum")
     public ResponseEntity<List<WebArticleCountVo>> queryWebArticleSum(){
-        return ResponseEntity.ok(this.articleServiceImpl.queryWebArticleSum());
+        return ResponseEntity.ok(articleServiceImpl.queryWebArticleSum());
     }
 }
 

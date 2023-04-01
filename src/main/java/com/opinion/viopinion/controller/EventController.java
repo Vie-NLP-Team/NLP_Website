@@ -2,6 +2,7 @@ package com.opinion.viopinion.controller;
 
 import com.opinion.viopinion.entity.dto.EventDto;
 import com.opinion.viopinion.service.impl.EventServiceImpl;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -19,8 +20,8 @@ public class EventController {
      * @return Event
      */
     @GetMapping
-    public List<EventDto> queryEvent() {
-        return eventServiceImpl.queryAllEvent();
+    public ResponseEntity<List<EventDto>> queryEvent() {
+        return ResponseEntity.ok(eventServiceImpl.queryAllEvent());
     }
 
     /**
@@ -29,7 +30,7 @@ public class EventController {
      * @return Event
      */
     @GetMapping("{newscycle}")
-    public List<EventDto> queryCycleEvent(@PathVariable("newscycle") Integer newsCycle) {
-        return eventServiceImpl.queryEventByCycle(newsCycle);
+    public ResponseEntity<List<EventDto>> queryCycleEvent(@PathVariable("newscycle") Integer newsCycle) {
+        return ResponseEntity.ok(eventServiceImpl.queryEventByCycle(newsCycle));
     }
 }

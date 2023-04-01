@@ -2,6 +2,7 @@ package com.opinion.viopinion.controller;
 
 import com.opinion.viopinion.entity.vo.MonthVo;
 import com.opinion.viopinion.service.impl.MonthServiceImpl;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class MonthController {
      * 通过热点事件id返回新闻列表
      */
     @GetMapping("{monthevent}")
-    public List<MonthVo> queryHotPointArticle(@PathVariable("monthevent") Integer monthevent) {
-        return this.monthServiceImpl.queryMonthOfArticle(monthevent);
+    public ResponseEntity<List<MonthVo>> queryHotPointArticle(@PathVariable("monthevent") Integer monthevent) {
+        return ResponseEntity.ok(monthServiceImpl.queryMonthOfArticle(monthevent));
     }
 }
