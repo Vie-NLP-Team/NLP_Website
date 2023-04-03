@@ -29,7 +29,7 @@ public class ArticleDto {
      */
     private Date pubTime;
     /**
-     * body中的图片链接,多个图片分号隔开，pic/img1.jpg;pic/img2.jps
+     * body中的图片链接,多个图片分号隔开
      */
     private String images;
     /**

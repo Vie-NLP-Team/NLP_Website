@@ -15,5 +15,4 @@ public class ViopinionApplication {
     public static void main(String[] args) {
         SpringApplication.run(ViopinionApplication.class, args);
     }
-
 }

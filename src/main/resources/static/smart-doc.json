@@ -1,21 +1,41 @@
 {
-  "serverUrl": "http://localhost:17150",
-  "outPath": "./src/main/resources/static/doc",
+  "serverUrl": "http://localhost:8080",
   "isStrict": false,
-  "#####": "allInOne:true  此参数表示记录文档变更的记录",
-  "createDebugPage": false,
+  "allInOne": true,
+  "outPath": "./src/main/resources/static/doc",
+  "#####": "此参数表示记录文档变更的记录",
+  "coverOld": true,
+  "createDebugPage": true,
   "packageFilters": "com.opinion.viopinion.controller.*",
+  "md5EncryptedHtmlName": false,
+  "style":"rainbow",
+  "sortByTitle":false,
   "showAuthor":true,
-  "inlineEnum": true,
+  "requestFieldToUnderline":true,
+  "responseFieldToUnderline":true,
+  "inlineEnum":true,
+  "recursionLimit":7,
+  "allInOneDocFileName":"System.html",
+  "requestExample":"true",
+  "responseExample":"true",
+  "requestParamsTable": true,
+  "responseParamsTable": true,
+  "displayActualType":false,
+  "ignoreRequestParams":[
+    ""
+  ],
   "revisionLogs": [{
-    "_revisionTime": "文档修订时间",
+    "version": "1.0",
     "revisionTime": "2023-4-4 10:30",
-    "_status": "update,create可选",
     "status": "update",
     "author": "陈志豪",
-    "_remarks": "变更描述",
-    "remarks": "desc"
+    "remarks": "后续功能开发中"
   }],
-    "title": "越南语新闻舆情分析系统"
+  "groups": [{
+      "name": "CRUD功能",
+      "apis": "com.opinion.viopinion.controller.*"
+  }]
 }
+
+
 
