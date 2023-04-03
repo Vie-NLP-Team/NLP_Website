@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * (Words)表控制层
+ * @since 2023-03-06 11:52:25
+ */
 @RestController
 @RequestMapping("words")
 public class WordsController {

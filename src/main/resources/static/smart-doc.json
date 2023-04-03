@@ -1,0 +1,21 @@
+{
+  "serverUrl": "http://localhost:17150",
+  "outPath": "./src/main/resources/static/doc",
+  "isStrict": false,
+  "#####": "allInOne:true  此参数表示记录文档变更的记录",
+  "createDebugPage": false,
+  "packageFilters": "com.opinion.viopinion.controller.*",
+  "showAuthor":true,
+  "inlineEnum": true,
+  "revisionLogs": [{
+    "_revisionTime": "文档修订时间",
+    "revisionTime": "2023-4-4 10:30",
+    "_status": "update,create可选",
+    "status": "update",
+    "author": "陈志豪",
+    "_remarks": "变更描述",
+    "remarks": "desc"
+  }],
+    "title": "越南语新闻舆情分析系统"
+}
+

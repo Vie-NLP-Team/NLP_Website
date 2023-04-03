@@ -6,6 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+/**
+ * (Event)表控制层
+ * @since 2023-03-06 11:52:25
+ */
 @RestController
 @RequestMapping("event")
 public class EventController {
