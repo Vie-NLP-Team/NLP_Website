@@ -16,7 +16,6 @@ public class MonthServiceImpl implements MonthService {
 
     private final MonthRepository monthRepository;
     private final ArticleRepository articleRepository;
-
     public MonthServiceImpl(MonthRepository monthRepository, ArticleRepository articleRepository) {
         this.monthRepository = monthRepository;
         this.articleRepository = articleRepository;

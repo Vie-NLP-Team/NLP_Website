@@ -14,7 +14,6 @@ public class EventServiceImpl implements EventService {
     public EventServiceImpl(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
-
     @Override
     public List<EventDto> queryAllEvent() {
         return eventRepository.findAll();
@@ -22,6 +21,7 @@ public class EventServiceImpl implements EventService {
 
     /**
      * 通过热点事件周期返回事件列表
+     *
      * @return Event
      */
     @Override

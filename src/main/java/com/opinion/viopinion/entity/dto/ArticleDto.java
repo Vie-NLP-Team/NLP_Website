@@ -9,7 +9,6 @@ import java.util.Date;
 
 /**
  * (Article)实体类
- * @author makejava
  * @since 2022-03-06 11:52:29
  */
 @Data

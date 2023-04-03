@@ -12,14 +12,15 @@ import java.util.List;
 @RestController
 @RequestMapping("words")
 public class WordsController {
-    private final WordsServiceImpl wordsServiceImpl;
 
+    private final WordsServiceImpl wordsServiceImpl;
     public WordsController(WordsServiceImpl wordsServiceImpl) {
         this.wordsServiceImpl = wordsServiceImpl;
     }
 
     /**
      * 高频词词云可视化
+     *
      */
     @GetMapping
     public ResponseEntity<List<WordFrequency>> wordsCloudVisual() {

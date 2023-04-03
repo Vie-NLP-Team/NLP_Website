@@ -14,7 +14,6 @@ import java.util.List;
 public class WordsServiceImpl implements WordsService {
 
     private final WordsRepository wordsRepository;
-
     public WordsServiceImpl(WordsRepository wordsRepository) {
         this.wordsRepository = wordsRepository;
     }

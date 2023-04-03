@@ -17,6 +17,8 @@ public class MonthController {
 
     /**
      * 通过热点事件id返回新闻列表
+     *
+     * @param monthevent 热点事件id
      */
     @GetMapping("{monthevent}")
     public ResponseEntity<List<MonthVo>> queryHotPointArticle(@PathVariable("monthevent") Integer monthevent) {

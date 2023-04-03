@@ -3,13 +3,10 @@ package com.opinion.viopinion.service;
 import com.opinion.viopinion.entity.dto.ArticleDto;
 import com.opinion.viopinion.entity.vo.WebArticleCountVo;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import java.util.List;
 
 /**
  * (Article)表服务接口
- *
- * @author makejava
  * @since 2022-03-06 11:52:31
  */
 public interface ArticleService {
@@ -30,10 +27,11 @@ public interface ArticleService {
     /**
      * 分页查询
      *
-     * @param pageRequest      分页对象
+     * @param pageNum 当前页数
+     * @param pageSize 当前页数据量
      * @return 查询结果
      */
-    Page<ArticleDto> queryByPage(PageRequest pageRequest);
+    Page<ArticleDto> queryByPage(Integer pageNum, Integer pageSize);
     /**
      * 新增数据
      *
