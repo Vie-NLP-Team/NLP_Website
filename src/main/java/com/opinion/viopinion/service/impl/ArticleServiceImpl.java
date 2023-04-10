@@ -1,8 +1,12 @@
 package com.opinion.viopinion.service.impl;
 
+import com.opinion.viopinion.entity.dto.ArticleAndWebDto;
 import com.opinion.viopinion.entity.dto.ArticleDto;
 import com.opinion.viopinion.entity.vo.WebArticleCountVo;
+import com.opinion.viopinion.entity.vo.WebArticleSenCountVo;
+import com.opinion.viopinion.repository.ArticleAndWebRepository;
 import com.opinion.viopinion.repository.ArticleRepository;
+import com.opinion.viopinion.repository.MonthRepository;
 import com.opinion.viopinion.repository.WebRepository;
 import com.opinion.viopinion.service.ArticleService;
 import lombok.var;
@@ -11,6 +15,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * (Article)表服务实现类
@@ -21,9 +26,14 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
     private final WebRepository webRepository;
-    public ArticleServiceImpl(ArticleRepository articleRepository, WebRepository webRepository) {
+    private final MonthRepository monthRepository;
+    private final ArticleAndWebRepository articleAndWebRepository;
+    public ArticleServiceImpl(ArticleRepository articleRepository, WebRepository webRepository,
+                              MonthRepository monthRepository, ArticleAndWebRepository articleAndWebRepository) {
         this.articleRepository = articleRepository;
         this.webRepository = webRepository;
+        this.monthRepository = monthRepository;
+        this.articleAndWebRepository = articleAndWebRepository;
     }
 
     /**
@@ -87,7 +97,7 @@ public class ArticleServiceImpl implements ArticleService {
     /**
      * 返回新闻社分别统计的文章的总数
      *
-     * @return Web
+     * @return 新闻社文章数量
      */
     @Override
     public List<WebArticleCountVo> queryWebArticleSum() {
@@ -99,5 +109,38 @@ public class ArticleServiceImpl implements ArticleService {
             webCount.add(web);
         });
         return webCount;
+    }
+
+    /**
+     * 新闻事件统计的预处理
+     */
+    @Override
+    public void articleAndWebUpdate() {
+        webRepository.findAll().forEach(w -> {
+            var aw = new ArticleAndWebDto();
+            aw.setWebName(w.getWebName());
+            articleRepository.findArticleByWebsiteId(w.getWebsiteId()).forEach(a -> {
+                if(monthRepository.existsMontharticleDtoByMaId(a.getId())) {
+                    aw.setSentiment(monthRepository.findMontharticleDtoByMaId(a.getId()).getSentiment());
+                    aw.setMaId(monthRepository.findMontharticleDtoByMaId(a.getId()).getMaId());
+                    aw.setMonthevent(monthRepository.findMontharticleDtoByMaId(a.getId()).getMonthevent());
+                    articleAndWebRepository.save(aw);
+                }
+            });
+        });
+    }
+
+    /**
+     * 返回根据新闻社类别统计的文章下的正面态度和负面态度的总数
+     *
+     * @return 正面统计数量和负面统计数量
+     */
+    @Override
+    public List<WebArticleSenCountVo> queryWebSenSum(Integer sentiment) {
+        List<WebArticleSenCountVo> webSenCount = new ArrayList<>();
+        articleAndWebRepository.findAll().stream()
+                .filter(aw -> aw.getSentiment().equals(sentiment));
+//                .collect(Collectors.summingInt(ArticleAndWebDto::getWebName));
+        return webSenCount;
     }
 }

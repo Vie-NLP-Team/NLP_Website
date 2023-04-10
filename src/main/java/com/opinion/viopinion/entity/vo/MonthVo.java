@@ -13,7 +13,7 @@ public class MonthVo {
     /**
      * 文章id，对应article表的id
      */
-    private Integer mId;
+    private Integer maId;
     /**
      * 文章标题
      */

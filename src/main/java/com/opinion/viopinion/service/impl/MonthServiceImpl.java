@@ -32,9 +32,9 @@ public class MonthServiceImpl implements MonthService {
         List<MonthVo> months = new ArrayList<>();
         monthRepository.findMontharticleByMonthevent(monthevent).forEach(m -> {
             MonthVo month = new MonthVo();
-            var article = articleRepository.findArticleById(m.getMId());
+            var article = articleRepository.findArticleById(m.getMaId());
             BeanUtils.copyProperties(article, month);
-            month.setMId(m.getMId());
+            month.setMaId(m.getMaId());
             month.setMonthevent(m.getMonthevent());
             months.add(month);
         });

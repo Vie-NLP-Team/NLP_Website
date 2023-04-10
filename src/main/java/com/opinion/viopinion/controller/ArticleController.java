@@ -2,6 +2,7 @@ package com.opinion.viopinion.controller;
 
 import com.opinion.viopinion.entity.dto.ArticleDto;
 import com.opinion.viopinion.entity.vo.WebArticleCountVo;
+import com.opinion.viopinion.entity.vo.WebArticleSenCountVo;
 import com.opinion.viopinion.service.impl.ArticleServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -88,10 +89,29 @@ public class ArticleController {
     /**
      * 返回新闻社分别统计的文章的总数
      *
+     * @return 新闻社文章数量
      */
     @GetMapping("/webSum")
-    public ResponseEntity<List<WebArticleCountVo>> queryWebArticleSum(){
+    public ResponseEntity<List<WebArticleCountVo>> queryWebArticleSum() {
         return ResponseEntity.ok(articleServiceImpl.queryWebArticleSum());
+    }
+
+    /**
+     * 新闻事件统计的预处理
+     */
+    @GetMapping("/count")
+    public void articleAndWebUpdate() {
+        articleServiceImpl.articleAndWebUpdate();
+    }
+
+    /**
+     * 返回根据新闻社类别统计的文章下的正面态度和负面态度的总数
+     *
+     * @return 正面统计数量和负面统计数量
+     */
+    @GetMapping("/webSum/sen/{sentiment}")
+    public ResponseEntity<List<WebArticleSenCountVo>> queryWebSenSum(@PathVariable("sentiment") Integer sentiment) {
+        return ResponseEntity.ok(articleServiceImpl.queryWebSenSum(sentiment));
     }
 }
 

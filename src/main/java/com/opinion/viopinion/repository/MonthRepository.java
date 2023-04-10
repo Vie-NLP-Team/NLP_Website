@@ -7,4 +7,7 @@ import java.util.List;
 @Repository
 public interface MonthRepository extends VisualRepository<MontharticleDto, Integer> {
     List<MontharticleDto> findMontharticleByMonthevent(Integer monthevent);
+    List<MontharticleDto> findAll();
+    boolean existsMontharticleDtoByMaId(Integer maId);
+    MontharticleDto findMontharticleDtoByMaId(Integer maId);
 }

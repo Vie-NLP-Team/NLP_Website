@@ -14,13 +14,13 @@ public class MontharticleDto {
      * 文章id，对应article表的id
      */
     @Id
-    private Integer mId;
+    private Integer maId;
     /**
      * 热点事件id，对应event表的id
      */
     private Integer monthevent;
     /**
-     * 判断依据
+     * 态度判断依据
      */
     private Integer sentiment;
 }
