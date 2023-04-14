@@ -15,6 +15,10 @@ public class EventDto {
      */
     @Id
     private Integer eventId;
+    /**
+     * 事件图片url
+     */
+    private String eventImage;
     private String title;
     private String keyword;
     private String abstract2;

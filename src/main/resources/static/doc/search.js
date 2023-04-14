@@ -111,18 +111,32 @@ api.push({
     list: []
 })
 api[1].list.push({
-    alias: 'PretreatmentController',
+    alias: 'ClusterController',
     order: '1',
+    link: '(event)表控制层',
+    desc: '(Event)表控制层',
+    list: []
+})
+api[1].list.push({
+    alias: 'PretreatmentController',
+    order: '2',
     link: '(article_website)表控制层',
     desc: '(Article_website)表控制层',
     list: []
 })
-api[1].list[0].list.push({
+api[1].list[1].list.push({
     order: '1',
     deprecated: 'false',
     url: 'http://localhost:8080/pre/count',
     desc: '新闻事件统计的预处理',
 });
+api[1].list.push({
+    alias: 'SentimentController',
+    order: '3',
+    link: '(article)表控制层',
+    desc: '(Article)表控制层',
+    list: []
+})
 document.onkeydown = keyDownSearch;
 function keyDownSearch(e) {
     const theEvent = e;
