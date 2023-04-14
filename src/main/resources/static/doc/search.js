@@ -1,5 +1,5 @@
 let api = [];
-const apiDocListSize = 1
+const apiDocListSize = 2
 api.push({
     name: 'CRUD功能',
     order: '1',
@@ -57,7 +57,7 @@ api[0].list[0].list.push({
 api[0].list[0].list.push({
     order: '8',
     deprecated: 'false',
-    url: 'http://localhost:8080/article/webSum/sen',
+    url: 'http://localhost:8080/article/webSum/sen/{sentiment}',
     desc: '返回根据新闻社类别统计的文章下的正面态度和负面态度的总数',
 });
 api[0].list.push({
@@ -104,6 +104,24 @@ api[0].list[3].list.push({
     deprecated: 'false',
     url: 'http://localhost:8080/words',
     desc: '高频词词云可视化',
+});
+api.push({
+    name: 'Quartz功能',
+    order: '2',
+    list: []
+})
+api[1].list.push({
+    alias: 'PretreatmentController',
+    order: '1',
+    link: '(article_website)表控制层',
+    desc: '(Article_website)表控制层',
+    list: []
+})
+api[1].list[0].list.push({
+    order: '1',
+    deprecated: 'false',
+    url: 'http://localhost:8080/pre/count',
+    desc: '新闻事件统计的预处理',
 });
 document.onkeydown = keyDownSearch;
 function keyDownSearch(e) {

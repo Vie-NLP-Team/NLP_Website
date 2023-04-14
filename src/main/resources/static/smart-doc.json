@@ -33,7 +33,10 @@
   }],
   "groups": [{
       "name": "CRUD功能",
-      "apis": "com.opinion.viopinion.controller.*"
+      "apis": "com.opinion.viopinion.controller.crud.*"
+  }, {
+    "name": "Quartz功能",
+    "apis": "com.opinion.viopinion.controller.quartz.*"
   }]
 }
 

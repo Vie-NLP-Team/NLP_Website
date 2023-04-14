@@ -1,4 +1,4 @@
-package com.opinion.viopinion.controller;
+package com.opinion.viopinion.controller.crud;
 
 import com.opinion.viopinion.entity.dto.ArticleDto;
 import com.opinion.viopinion.entity.vo.WebArticleCountVo;
@@ -94,14 +94,6 @@ public class ArticleController {
     @GetMapping("/webSum")
     public ResponseEntity<List<WebArticleCountVo>> queryWebArticleSum() {
         return ResponseEntity.ok(articleServiceImpl.queryWebArticleSum());
-    }
-
-    /**
-     * 新闻事件统计的预处理
-     */
-    @GetMapping("/count")
-    public void articleAndWebUpdate() {
-        articleServiceImpl.articleAndWebUpdate();
     }
 
     /**

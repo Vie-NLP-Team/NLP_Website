@@ -25,7 +25,7 @@ public class WordsServiceImpl implements WordsService {
         frequencyAnalyzer.setMinWordLength(2);
         frequencyAnalyzer.setWordTokenizer(new ChineseWordTokenizer());
         List<String> words = new ArrayList<>();
-        wordsRepository.findAll().forEach(word -> words.add(word.getCnWord()));
+        wordsRepository.findAllByNature("N").forEach(word -> words.add(word.getCnWord()));
         return frequencyAnalyzer.load(words);
     }
 }

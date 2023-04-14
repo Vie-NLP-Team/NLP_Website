@@ -15,7 +15,6 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * (Article)表服务实现类
@@ -48,7 +47,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
     @Override
     public List<ArticleDto> queryByBody(String body){
-        return articleRepository.findArticlesByBody(body);
+        return articleRepository.findArticlesByBodyContaining(body);
     }
 
     /**

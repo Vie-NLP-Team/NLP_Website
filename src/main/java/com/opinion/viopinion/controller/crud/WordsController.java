@@ -1,4 +1,4 @@
-package com.opinion.viopinion.controller;
+package com.opinion.viopinion.controller.crud;
 
 import com.kennycason.kumo.WordFrequency;
 import com.opinion.viopinion.service.impl.WordsServiceImpl;

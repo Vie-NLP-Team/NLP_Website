@@ -19,4 +19,8 @@ public class WordsDto {
      * 词语(中文)
      */
     private String cnWord;
+    /**
+     * 词性
+     */
+    private String nature;
 }

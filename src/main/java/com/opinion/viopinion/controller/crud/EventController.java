@@ -1,4 +1,4 @@
-package com.opinion.viopinion.controller;
+package com.opinion.viopinion.controller.crud;
 
 import com.opinion.viopinion.entity.dto.EventDto;
 import com.opinion.viopinion.service.impl.EventServiceImpl;

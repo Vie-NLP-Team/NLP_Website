@@ -1,4 +1,4 @@
-package com.opinion.viopinion.controller;
+package com.opinion.viopinion.controller.crud;
 
 import com.opinion.viopinion.entity.vo.MonthVo;
 import com.opinion.viopinion.service.impl.MonthServiceImpl;

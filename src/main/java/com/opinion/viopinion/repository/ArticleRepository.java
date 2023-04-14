@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface ArticleRepository extends StoreRepository<ArticleDto, Integer> {
     ArticleDto findArticleById(Integer id);
-    List<ArticleDto> findArticlesByBody(String body);
+    List<ArticleDto> findArticlesByBodyContaining(String body);
     Page<ArticleDto> findAll(Pageable pageable);
     List<ArticleDto> findArticleByWebsiteId(Integer websiteId);
 }

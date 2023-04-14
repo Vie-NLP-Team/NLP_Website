@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface WordsRepository extends VisualRepository<WordsDto, Integer> {
 
-    List<WordsDto> findAll();
+    List<WordsDto> findAllByNature(String nature);
 }
