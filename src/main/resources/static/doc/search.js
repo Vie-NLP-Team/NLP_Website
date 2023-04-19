@@ -60,6 +60,12 @@ api[0].list[0].list.push({
     url: 'http://localhost:8080/article/webSum/sen/{sentiment}',
     desc: '返回根据新闻社类别统计的文章下的正面态度和负面态度的总数',
 });
+api[0].list[0].list.push({
+    order: '9',
+    deprecated: 'false',
+    url: 'http://localhost:8080/article/queryWebSenEventSum/{monthevent}/{sentiment}',
+    desc: '统计每个事件的各个新闻社的新闻数量(分正面和负面)',
+});
 api[0].list.push({
     alias: 'EventController',
     order: '2',

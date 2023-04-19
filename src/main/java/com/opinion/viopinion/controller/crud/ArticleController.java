@@ -1,8 +1,8 @@
 package com.opinion.viopinion.controller.crud;
 
 import com.opinion.viopinion.entity.dto.ArticleDto;
+import com.opinion.viopinion.entity.vo.EventWebSenCountVo;
 import com.opinion.viopinion.entity.vo.WebArticleCountVo;
-import com.opinion.viopinion.entity.vo.WebArticleSenCountVo;
 import com.opinion.viopinion.service.impl.ArticleServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -102,8 +102,18 @@ public class ArticleController {
      * @return 正面统计数量和负面统计数量
      */
     @GetMapping("/webSum/sen/{sentiment}")
-    public ResponseEntity<List<WebArticleSenCountVo>> queryWebSenSum(@PathVariable("sentiment") Integer sentiment) {
+    public ResponseEntity<List<WebArticleCountVo>> queryWebSenSum(@PathVariable("sentiment") Integer sentiment) {
         return ResponseEntity.ok(articleServiceImpl.queryWebSenSum(sentiment));
+    }
+
+    /**
+     * 统计每个事件的各个新闻社的新闻数量(分正面和负面)
+     *
+     * @return 相关媒体正（负）面新闻数量
+     */
+    @GetMapping("/queryWebSenEventSum/{monthevent}/{sentiment}")
+    public ResponseEntity<List<EventWebSenCountVo>> queryWebSenEventSum(@PathVariable("monthevent") Integer monthevent, @PathVariable("sentiment") Integer sentiment) {
+        return ResponseEntity.ok(articleServiceImpl.queryWebSenEventSum(monthevent, sentiment));
     }
 }
 

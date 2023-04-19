@@ -1,8 +1,8 @@
 package com.opinion.viopinion.service;
 
 import com.opinion.viopinion.entity.dto.ArticleDto;
+import com.opinion.viopinion.entity.vo.EventWebSenCountVo;
 import com.opinion.viopinion.entity.vo.WebArticleCountVo;
-import com.opinion.viopinion.entity.vo.WebArticleSenCountVo;
 import org.springframework.data.domain.Page;
 import java.util.List;
 
@@ -70,5 +70,12 @@ public interface ArticleService {
      *
      * @return 正面统计数量和负面统计数量
      */
-    List<WebArticleSenCountVo> queryWebSenSum(Integer sentitment);
+    List<WebArticleCountVo> queryWebSenSum(Integer sentiment);
+
+    /**
+     * 统计每个事件的各个新闻社的新闻数量(分正面和负面)
+     *
+     * @return 相关媒体正（负）面新闻数量
+     */
+    List<EventWebSenCountVo> queryWebSenEventSum(Integer monthevent, Integer sentiment);
 }

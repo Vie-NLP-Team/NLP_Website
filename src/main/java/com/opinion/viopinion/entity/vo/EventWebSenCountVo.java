@@ -3,17 +3,17 @@ package com.opinion.viopinion.entity.vo;
 import lombok.Data;
 
 @Data
-public class WebArticleCountVo {
+public class EventWebSenCountVo {
     /**
-     * 新闻社
+     * 新闻社名称
      */
     private String webName;
     /**
-     * 统计每个新闻社的文章总数
+     * 统计文章数
      */
     private Integer articleCount;
 
-    public WebArticleCountVo(String webName, Integer articleCount) {
+    public EventWebSenCountVo(String webName, Integer articleCount) {
         this.webName = webName;
         this.articleCount = articleCount;
     }

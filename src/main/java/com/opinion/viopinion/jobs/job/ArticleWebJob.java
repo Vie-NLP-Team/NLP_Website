@@ -4,7 +4,7 @@ import org.quartz.*;
 public class ArticleWebJob implements Job {
 
     @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+    public void execute(JobExecutionContext context) {
         System.out.println("Hello");
     }
 }

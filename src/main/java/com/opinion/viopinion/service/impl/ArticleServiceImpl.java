@@ -2,8 +2,8 @@ package com.opinion.viopinion.service.impl;
 
 import com.opinion.viopinion.entity.dto.ArticleAndWebDto;
 import com.opinion.viopinion.entity.dto.ArticleDto;
+import com.opinion.viopinion.entity.vo.EventWebSenCountVo;
 import com.opinion.viopinion.entity.vo.WebArticleCountVo;
-import com.opinion.viopinion.entity.vo.WebArticleSenCountVo;
 import com.opinion.viopinion.repository.ArticleAndWebRepository;
 import com.opinion.viopinion.repository.ArticleRepository;
 import com.opinion.viopinion.repository.MonthRepository;
@@ -15,6 +15,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * (Article)表服务实现类
@@ -102,7 +103,7 @@ public class ArticleServiceImpl implements ArticleService {
     public List<WebArticleCountVo> queryWebArticleSum() {
         List<WebArticleCountVo> webCount = new ArrayList<>();
         webRepository.findAll().forEach(w -> {
-            var web = new WebArticleCountVo();
+            var web = new WebArticleCountVo(null, null);
             web.setWebName(w.getWebName());
             web.setArticleCount(articleRepository.findArticleByWebsiteId(w.getWebsiteId()).size());
             webCount.add(web);
@@ -135,11 +136,36 @@ public class ArticleServiceImpl implements ArticleService {
      * @return 正面统计数量和负面统计数量
      */
     @Override
-    public List<WebArticleSenCountVo> queryWebSenSum(Integer sentiment) {
-        List<WebArticleSenCountVo> webSenCount = new ArrayList<>();
-        articleAndWebRepository.findAll().stream()
-                .filter(aw -> aw.getSentiment().equals(sentiment));
-//                .collect(Collectors.summingInt(ArticleAndWebDto::getWebName));
-        return webSenCount;
+    public List<WebArticleCountVo> queryWebSenSum(Integer sentiment) {
+        return articleAndWebRepository.findAll().stream()
+                .filter(aw -> aw.getSentiment().equals(sentiment))
+                .collect(Collectors.groupingBy(ArticleAndWebDto::getWebName, Collectors.counting()))
+                .entrySet().stream().map(e -> {
+                    var webArticleCountVo = new WebArticleCountVo(e.getKey(), Math.toIntExact(e.getValue()));
+                    webArticleCountVo.setWebName(e.getKey());
+                    webArticleCountVo.setArticleCount(Math.toIntExact(e.getValue()));
+                    return webArticleCountVo;
+                })
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 统计每个事件的各个新闻社的新闻数量(分正面和负面)
+     *
+     * @return 相关媒体正（负）面新闻数量
+     */
+    @Override
+    public List<EventWebSenCountVo> queryWebSenEventSum(Integer monthevent, Integer sentiment) {
+        return articleAndWebRepository.findArticleAndWebDtoByMontheventAndSentiment(monthevent, sentiment)
+                .stream()
+                .map(ArticleAndWebDto::getWebName)
+                .collect(Collectors.groupingBy(Object::toString))
+                .entrySet().stream().map(e -> {
+                    var eventWebSenCountVo = new EventWebSenCountVo(e.getKey(), e.getValue().size());
+                    eventWebSenCountVo.setWebName(e.getKey());
+                    eventWebSenCountVo.setArticleCount(e.getValue().size());
+                    return eventWebSenCountVo;
+                })
+                .collect(Collectors.toList());
     }
 }
