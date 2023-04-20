@@ -13,9 +13,13 @@ import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import vn.pipeline.Annotation;
+import vn.pipeline.VnCoreNLP;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.io.*;
 
 /**
  * (Article)表服务实现类
@@ -23,7 +27,6 @@ import java.util.stream.Collectors;
  */
 @Service
 public class ArticleServiceImpl implements ArticleService {
-
     private final ArticleRepository articleRepository;
     private final WebRepository webRepository;
     private final MonthRepository monthRepository;
@@ -69,8 +72,9 @@ public class ArticleServiceImpl implements ArticleService {
      * @param articleDto 实例对象
      */
     @Override
-    public void insert(ArticleDto articleDto) {
+    public String insert(ArticleDto articleDto) {
         articleRepository.save(articleDto);
+        return "Successfully added data";
     }
     /**
      * 修改数据
@@ -78,10 +82,14 @@ public class ArticleServiceImpl implements ArticleService {
      * @param articleDto 实例对象
      */
     @Override
-    public void update(ArticleDto articleDto) {
+    public String update(ArticleDto articleDto) {
         var reArticle = articleRepository.findArticleById(articleDto.getId());
-        BeanUtils.copyProperties(articleDto, reArticle);
-        articleRepository.save(reArticle);
+        if(!reArticle.toString().isEmpty()) {
+            BeanUtils.copyProperties(articleDto, reArticle);
+            articleRepository.save(reArticle);
+            return "Successfully updated data";
+        }
+        return "Failed to update data, data with id " + articleDto.getId() + " does not exist";
     }
 
     /**
@@ -90,12 +98,16 @@ public class ArticleServiceImpl implements ArticleService {
      * @param id 主键
      */
     @Override
-    public void deleteById(Integer id) {
-        articleRepository.deleteById(id);
+    public String deleteById(Integer id) {
+        if(!articleRepository.findArticleById(id).toString().isEmpty()) {
+            articleRepository.deleteById(id);
+            return "Successfully deleted data";
+        }
+        return "Failed to delete data, data with id " + id + " does not exist";
     }
 
     /**
-     * 返回新闻社分别统计的文章的总数
+     * 返回根据新闻社分别统计的文章的总数
      *
      * @return 新闻社文章数量
      */
@@ -116,18 +128,22 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public void articleAndWebUpdate() {
-        webRepository.findAll().forEach(w -> {
-            var aw = new ArticleAndWebDto();
-            aw.setWebName(w.getWebName());
-            articleRepository.findArticleByWebsiteId(w.getWebsiteId()).forEach(a -> {
-                if(monthRepository.existsMontharticleDtoByMaId(a.getId())) {
-                    aw.setSentiment(monthRepository.findMontharticleDtoByMaId(a.getId()).getSentiment());
-                    aw.setMaId(monthRepository.findMontharticleDtoByMaId(a.getId()).getMaId());
-                    aw.setMonthevent(monthRepository.findMontharticleDtoByMaId(a.getId()).getMonthevent());
-                    articleAndWebRepository.save(aw);
-                }
+        if(!articleAndWebRepository.findAll().isEmpty()) {
+            articleAndWebRepository.deleteAll();
+        } else {
+            webRepository.findAll().forEach(w -> {
+                var aw = new ArticleAndWebDto();
+                aw.setWebName(w.getWebName());
+                articleRepository.findArticleByWebsiteId(w.getWebsiteId()).forEach(a -> {
+                    if (monthRepository.existsMontharticleDtoByMaId(a.getId())) {
+                        aw.setSentiment(monthRepository.findMontharticleDtoByMaId(a.getId()).getSentiment());
+                        aw.setMaId(monthRepository.findMontharticleDtoByMaId(a.getId()).getMaId());
+                        aw.setMonthevent(monthRepository.findMontharticleDtoByMaId(a.getId()).getMonthevent());
+                        articleAndWebRepository.save(aw);
+                    }
+                });
             });
-        });
+        }
     }
 
     /**
@@ -167,5 +183,22 @@ public class ArticleServiceImpl implements ArticleService {
                     return eventWebSenCountVo;
                 })
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 新闻语料分词，词性标注，命名实体识别，以及依赖解析
+     */
+    @Override
+    public void vnCoreNLPExecute() throws IOException {
+        //“wseg”、“pos”、“ner”和“parse”分别指分词、pos标记、ner和依赖解析。
+        String[] annotators = {"wseg", "pos", "ner", "parse"};
+        VnCoreNLP pipeline = new VnCoreNLP(annotators);
+
+        String str = articleRepository.findArticleById(2).getBody();
+        Annotation annotation = new Annotation(str);
+        pipeline.annotate(annotation);
+
+        System.out.println(annotation.getWords());
+
     }
 }

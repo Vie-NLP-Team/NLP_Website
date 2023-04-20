@@ -4,6 +4,8 @@ import com.opinion.viopinion.entity.dto.ArticleDto;
 import com.opinion.viopinion.entity.vo.EventWebSenCountVo;
 import com.opinion.viopinion.entity.vo.WebArticleCountVo;
 import org.springframework.data.domain.Page;
+
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -38,23 +40,23 @@ public interface ArticleService {
      *
      * @param articleDto 实例对象
      */
-    void insert(ArticleDto articleDto);
+    String insert(ArticleDto articleDto);
 
     /**
      * 修改数据
      *
      * @param articleDto 实例对象
      */
-    void update(ArticleDto articleDto);
+    String update(ArticleDto articleDto);
     /**
      * 通过主键删除数据
      *
      * @param id 主键
      */
-    void deleteById(Integer id);
+    String deleteById(Integer id);
 
     /**
-     * 返回新闻社分别统计的文章的总数
+     * 返回根据新闻社分别统计的文章的总数
      *
      * @return 新闻社文章数量
      */
@@ -78,4 +80,9 @@ public interface ArticleService {
      * @return 相关媒体正（负）面新闻数量
      */
     List<EventWebSenCountVo> queryWebSenEventSum(Integer monthevent, Integer sentiment);
+
+    /**
+     * 新闻语料分词，词性标注，命名实体识别，以及依赖解析
+     */
+    void vnCoreNLPExecute() throws IOException;
 }

@@ -15,7 +15,7 @@ public class ArticleWebQuartz {
                 .newTrigger()
                 .withIdentity("preTrigger") //标识
                 .startNow()
-                .withSchedule(cronSchedule("0 0 2 1 * ?"))
+                .withSchedule(cronSchedule("0 0 2 1 * ?")) //在每月的1日的凌晨2点执行任务
                 .forJob("articleWebJob")
                 .build();
         StdSchedulerFactory factory = new StdSchedulerFactory();

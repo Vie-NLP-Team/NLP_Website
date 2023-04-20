@@ -52,7 +52,7 @@ api[0].list[0].list.push({
     order: '7',
     deprecated: 'false',
     url: 'http://localhost:8080/article/webSum',
-    desc: '返回新闻社分别统计的文章的总数',
+    desc: '返回根据新闻社分别统计的文章的总数',
 });
 api[0].list[0].list.push({
     order: '8',
@@ -143,6 +143,12 @@ api[1].list.push({
     desc: '(Article)表控制层',
     list: []
 })
+api[1].list[2].list.push({
+    order: '1',
+    deprecated: 'false',
+    url: 'http://localhost:8080/analyse/all',
+    desc: '新闻语料分词，词性标注，命名实体识别，以及依赖解析',
+});
 document.onkeydown = keyDownSearch;
 function keyDownSearch(e) {
     const theEvent = e;

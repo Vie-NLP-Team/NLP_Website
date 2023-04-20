@@ -62,8 +62,8 @@ public class ArticleController {
      * @param articleDto 实体
      */
     @PostMapping
-    public void add(ArticleDto articleDto) {
-        articleServiceImpl.insert(articleDto);
+    public ResponseEntity<String> add(ArticleDto articleDto) {
+        return ResponseEntity.ok(articleServiceImpl.insert(articleDto));
     }
 
     /**
@@ -72,8 +72,8 @@ public class ArticleController {
      * @param articleDto 实体
      */
     @PutMapping
-    public void edit(ArticleDto articleDto) {
-        articleServiceImpl.update(articleDto);
+    public ResponseEntity<String> edit(ArticleDto articleDto) {
+        return ResponseEntity.ok(articleServiceImpl.update(articleDto));
     }
 
     /**
@@ -82,12 +82,12 @@ public class ArticleController {
      * @param id 主键
      */
     @DeleteMapping
-    public void deleteById(Integer id) {
-        articleServiceImpl.deleteById(id);
+    public ResponseEntity<String> deleteById(Integer id) {
+        return ResponseEntity.ok(articleServiceImpl.deleteById(id));
     }
 
     /**
-     * 返回新闻社分别统计的文章的总数
+     * 返回根据新闻社分别统计的文章的总数
      *
      * @return 新闻社文章数量
      */
