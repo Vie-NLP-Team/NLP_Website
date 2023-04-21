@@ -22,12 +22,20 @@ public class SentimentController {
     }
 
     /**
-     * 新闻语料分词，词性标注，命名实体识别，以及依赖解析(可选)
+     * 新闻语料分词，词性标注，命名实体识别，以及依赖解析 (可选)
      * @param first_num 开始序号
      * @param last_num 结束序号
      */
     @GetMapping("/all/{first}/{last}")
     public ResponseEntity<String> articleAndWebUpdate(@PathVariable("first") Integer first_num, @PathVariable("last") Integer last_num) throws IOException {
         return ResponseEntity.ok(articleServiceImpl.vnCoreNLPExecute(first_num, last_num));
+    }
+
+    /**
+     * 分词翻译 (越南语转中文)
+     */
+    @GetMapping("trans")
+    public ResponseEntity<String> coreWordsTranslate() {
+        return ResponseEntity.ok(articleServiceImpl.translateTest());
     }
 }

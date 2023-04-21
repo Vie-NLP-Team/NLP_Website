@@ -7,6 +7,7 @@ import com.opinion.viopinion.entity.vo.EventWebSenCountVo;
 import com.opinion.viopinion.entity.vo.WebArticleCountVo;
 import com.opinion.viopinion.repository.*;
 import com.opinion.viopinion.service.ArticleService;
+import com.opinion.viopinion.tool.Translate;
 import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -134,20 +135,19 @@ public class ArticleServiceImpl implements ArticleService {
     public void articleAndWebUpdate() {
         if(!articleAndWebRepository.findAll().isEmpty()) {
             articleAndWebRepository.deleteAll();
-        } else {
-            webRepository.findAll().forEach(w -> {
-                var aw = new ArticleAndWebDto();
-                aw.setWebName(w.getWebName());
-                articleRepository.findArticleDtoByWebsiteId(w.getWebsiteId()).forEach(a -> {
-                    if (monthRepository.existsMontharticleDtoByMaId(a.getId())) {
-                        aw.setSentiment(monthRepository.findMontharticleDtoByMaId(a.getId()).getSentiment());
-                        aw.setMaId(monthRepository.findMontharticleDtoByMaId(a.getId()).getMaId());
-                        aw.setMonthevent(monthRepository.findMontharticleDtoByMaId(a.getId()).getMonthevent());
-                        articleAndWebRepository.save(aw);
-                    }
-                });
-            });
         }
+        webRepository.findAll().forEach(w -> {
+            var aw = new ArticleAndWebDto();
+            aw.setWebName(w.getWebName());
+            articleRepository.findArticleDtoByWebsiteId(w.getWebsiteId()).forEach(a -> {
+                if (monthRepository.existsMontharticleDtoByMaId(a.getId())) {
+                    aw.setSentiment(monthRepository.findMontharticleDtoByMaId(a.getId()).getSentiment());
+                    aw.setMaId(monthRepository.findMontharticleDtoByMaId(a.getId()).getMaId());
+                    aw.setMonthevent(monthRepository.findMontharticleDtoByMaId(a.getId()).getMonthevent());
+                    articleAndWebRepository.save(aw);
+                }
+            });
+        });
     }
 
     /**
@@ -197,7 +197,7 @@ public class ArticleServiceImpl implements ArticleService {
         if(!coreWordsRepository.findAll().isEmpty()) {
             coreWordsRepository.deleteAllInBatch();
         }
-        //“wseg”、“pos”、“ner”和“parse”分别指分词、pos标记、ner和依赖解析。
+        // “wseg”、“pos”、“ner”和“parse”分别指分词、pos标记、ner和依赖解析。
         String[] annotators = {"wseg", "pos", "ner"};
         VnCoreNLP pipeline = new VnCoreNLP(annotators);
         String str = articleRepository.findArticleDtoByIdBetween(first_num, last_num).stream()
@@ -212,7 +212,33 @@ public class ArticleServiceImpl implements ArticleService {
             coreWordsDto.setPosTag(w.getPosTag());
             coreWordsDto.setNer(w.getNerLabel());
             return coreWordsDto;
+        }).filter(w -> {
+            // 过滤掉分词中的标点符号
+            String regEx="[`~!@#$%^&*()+=|{}':;,\\[\\].<>/?！￥…（）—【】‘；：”“’。，、？a-zA-Z0-9]";
+            return !w.getVnWord().matches(regEx);
+        }).filter(w -> {
+            // 过滤掉分词中的数字
+            String regEx ="[^0-9]";
+            return !w.getVnWord().matches(regEx);
         }).collect(Collectors.toList()));
+        return "Preprocessing completed";
+    }
+
+    /**
+     * 分词翻译(越南语转中文)
+     */
+    @Override
+    public String translateTest() {
+        Translate translate = new Translate();
+        coreWordsRepository.saveAll(
+            coreWordsRepository.findAll().stream()
+                .peek(word -> {
+                    try {
+                        word.setCnWord(translate.translateText(word.getVnWord(),"auto","zh_cn"));
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                }).collect(Collectors.toList()));
         return "Preprocessing completed";
     }
 }

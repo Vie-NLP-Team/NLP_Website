@@ -147,7 +147,13 @@ api[1].list[2].list.push({
     order: '1',
     deprecated: 'false',
     url: 'http://localhost:8080/analyse/all/{first}/{last}',
-    desc: '新闻语料分词，词性标注，命名实体识别，以及依赖解析',
+    desc: '新闻语料分词，词性标注，命名实体识别，以及依赖解析 (可选)',
+});
+api[1].list[2].list.push({
+    order: '2',
+    deprecated: 'false',
+    url: 'http://localhost:8080/analyse/trans',
+    desc: '分词翻译 (越南语转中文)',
 });
 document.onkeydown = keyDownSearch;
 function keyDownSearch(e) {
