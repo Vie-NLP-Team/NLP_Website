@@ -84,5 +84,5 @@ public interface ArticleService {
     /**
      * 新闻语料分词，词性标注，命名实体识别，以及依赖解析
      */
-    void vnCoreNLPExecute() throws IOException;
+    String vnCoreNLPExecute(Integer first_num, Integer last_num) throws IOException;
 }

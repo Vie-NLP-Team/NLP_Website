@@ -1,7 +1,7 @@
 let api = [];
 const apiDocListSize = 2
 api.push({
-    name: 'CRUD功能',
+    name: 'CRUD',
     order: '1',
     list: []
 })
@@ -112,7 +112,7 @@ api[0].list[3].list.push({
     desc: '高频词词云可视化',
 });
 api.push({
-    name: 'Quartz功能',
+    name: 'Quartz',
     order: '2',
     list: []
 })
@@ -146,7 +146,7 @@ api[1].list.push({
 api[1].list[2].list.push({
     order: '1',
     deprecated: 'false',
-    url: 'http://localhost:8080/analyse/all',
+    url: 'http://localhost:8080/analyse/all/{first}/{last}',
     desc: '新闻语料分词，词性标注，命名实体识别，以及依赖解析',
 });
 document.onkeydown = keyDownSearch;

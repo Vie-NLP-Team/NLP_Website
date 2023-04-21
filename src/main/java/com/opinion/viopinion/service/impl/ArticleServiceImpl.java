@@ -2,24 +2,25 @@ package com.opinion.viopinion.service.impl;
 
 import com.opinion.viopinion.entity.dto.ArticleAndWebDto;
 import com.opinion.viopinion.entity.dto.ArticleDto;
+import com.opinion.viopinion.entity.dto.CoreWordsDto;
 import com.opinion.viopinion.entity.vo.EventWebSenCountVo;
 import com.opinion.viopinion.entity.vo.WebArticleCountVo;
-import com.opinion.viopinion.repository.ArticleAndWebRepository;
-import com.opinion.viopinion.repository.ArticleRepository;
-import com.opinion.viopinion.repository.MonthRepository;
-import com.opinion.viopinion.repository.WebRepository;
+import com.opinion.viopinion.repository.*;
 import com.opinion.viopinion.service.ArticleService;
 import lombok.var;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.pipeline.Annotation;
 import vn.pipeline.VnCoreNLP;
+import vn.pipeline.Word;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.io.*;
 
 /**
  * (Article)表服务实现类
@@ -31,12 +32,15 @@ public class ArticleServiceImpl implements ArticleService {
     private final WebRepository webRepository;
     private final MonthRepository monthRepository;
     private final ArticleAndWebRepository articleAndWebRepository;
+    private final CoreWordsRepository coreWordsRepository;
     public ArticleServiceImpl(ArticleRepository articleRepository, WebRepository webRepository,
-                              MonthRepository monthRepository, ArticleAndWebRepository articleAndWebRepository) {
+                              MonthRepository monthRepository, ArticleAndWebRepository articleAndWebRepository,
+                              CoreWordsRepository coreWordsRepository) {
         this.articleRepository = articleRepository;
         this.webRepository = webRepository;
         this.monthRepository = monthRepository;
         this.articleAndWebRepository = articleAndWebRepository;
+        this.coreWordsRepository = coreWordsRepository;
     }
 
     /**
@@ -47,11 +51,11 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public ArticleDto queryById(Integer id) {
-        return articleRepository.findArticleById(id);
+        return articleRepository.findArticleDtoById(id);
     }
     @Override
     public List<ArticleDto> queryByBody(String body){
-        return articleRepository.findArticlesByBodyContaining(body);
+        return articleRepository.findArticleDtoByBodyContaining(body);
     }
 
     /**
@@ -83,7 +87,7 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public String update(ArticleDto articleDto) {
-        var reArticle = articleRepository.findArticleById(articleDto.getId());
+        var reArticle = articleRepository.findArticleDtoById(articleDto.getId());
         if(!reArticle.toString().isEmpty()) {
             BeanUtils.copyProperties(articleDto, reArticle);
             articleRepository.save(reArticle);
@@ -99,7 +103,7 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public String deleteById(Integer id) {
-        if(!articleRepository.findArticleById(id).toString().isEmpty()) {
+        if(!articleRepository.findArticleDtoById(id).toString().isEmpty()) {
             articleRepository.deleteById(id);
             return "Successfully deleted data";
         }
@@ -117,7 +121,7 @@ public class ArticleServiceImpl implements ArticleService {
         webRepository.findAll().forEach(w -> {
             var web = new WebArticleCountVo(null, null);
             web.setWebName(w.getWebName());
-            web.setArticleCount(articleRepository.findArticleByWebsiteId(w.getWebsiteId()).size());
+            web.setArticleCount(articleRepository.findArticleDtoByWebsiteId(w.getWebsiteId()).size());
             webCount.add(web);
         });
         return webCount;
@@ -134,7 +138,7 @@ public class ArticleServiceImpl implements ArticleService {
             webRepository.findAll().forEach(w -> {
                 var aw = new ArticleAndWebDto();
                 aw.setWebName(w.getWebName());
-                articleRepository.findArticleByWebsiteId(w.getWebsiteId()).forEach(a -> {
+                articleRepository.findArticleDtoByWebsiteId(w.getWebsiteId()).forEach(a -> {
                     if (monthRepository.existsMontharticleDtoByMaId(a.getId())) {
                         aw.setSentiment(monthRepository.findMontharticleDtoByMaId(a.getId()).getSentiment());
                         aw.setMaId(monthRepository.findMontharticleDtoByMaId(a.getId()).getMaId());
@@ -189,16 +193,26 @@ public class ArticleServiceImpl implements ArticleService {
      * 新闻语料分词，词性标注，命名实体识别，以及依赖解析
      */
     @Override
-    public void vnCoreNLPExecute() throws IOException {
+    public String vnCoreNLPExecute(Integer first_num, Integer last_num) throws IOException {
+        if(!coreWordsRepository.findAll().isEmpty()) {
+            coreWordsRepository.deleteAllInBatch();
+        }
         //“wseg”、“pos”、“ner”和“parse”分别指分词、pos标记、ner和依赖解析。
-        String[] annotators = {"wseg", "pos", "ner", "parse"};
+        String[] annotators = {"wseg", "pos", "ner"};
         VnCoreNLP pipeline = new VnCoreNLP(annotators);
-
-        String str = articleRepository.findArticleById(2).getBody();
+        String str = articleRepository.findArticleDtoByIdBetween(first_num, last_num).stream()
+                .map(ArticleDto::getBody)
+                .collect(Collectors.toList()).toString();
         Annotation annotation = new Annotation(str);
         pipeline.annotate(annotation);
-
-        System.out.println(annotation.getWords());
-
+        coreWordsRepository.saveAll(annotation.getWords().stream().map(word -> {
+            var w = new Word(word);
+            var coreWordsDto = new CoreWordsDto();
+            coreWordsDto.setVnWord(w.getForm());
+            coreWordsDto.setPosTag(w.getPosTag());
+            coreWordsDto.setNer(w.getNerLabel());
+            return coreWordsDto;
+        }).collect(Collectors.toList()));
+        return "Preprocessing completed";
     }
 }

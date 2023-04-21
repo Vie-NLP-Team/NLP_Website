@@ -3,6 +3,7 @@ package com.opinion.viopinion.controller.quartz;
 import com.opinion.viopinion.service.impl.ArticleServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,11 +22,12 @@ public class SentimentController {
     }
 
     /**
-     * 新闻语料分词，词性标注，命名实体识别，以及依赖解析
+     * 新闻语料分词，词性标注，命名实体识别，以及依赖解析(可选)
+     * @param first_num 开始序号
+     * @param last_num 结束序号
      */
-    @GetMapping("/all")
-    public ResponseEntity<String> articleAndWebUpdate() throws IOException {
-        articleServiceImpl.vnCoreNLPExecute();
-        return ResponseEntity.ok("Preprocessing completed");
+    @GetMapping("/all/{first}/{last}")
+    public ResponseEntity<String> articleAndWebUpdate(@PathVariable("first") Integer first_num, @PathVariable("last") Integer last_num) throws IOException {
+        return ResponseEntity.ok(articleServiceImpl.vnCoreNLPExecute(first_num, last_num));
     }
 }
